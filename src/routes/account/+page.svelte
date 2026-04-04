@@ -5,9 +5,9 @@
 	<div class="settings-grid">
 		<div class="settings-card premium-card">
 			<h3>Profile</h3>
-			<div class="field"><label>Name</label><input type="text" value="Alex Johnson" disabled /></div>
-			<div class="field"><label>Email</label><input type="email" value="alex@company.com" disabled /></div>
-			<div class="field"><label>Company</label><input type="text" value="Meridian Financial" disabled /></div>
+			<div class="field"><label for="account-name">Name</label><input id="account-name" type="text" value="Alex Johnson" disabled /></div>
+			<div class="field"><label for="account-email">Email</label><input id="account-email" type="email" value="alex@company.com" disabled /></div>
+			<div class="field"><label for="account-company">Company</label><input id="account-company" type="text" value="Meridian Financial" disabled /></div>
 			<button class="btn-secondary" disabled>Update Profile</button>
 		</div>
 		<div class="settings-card premium-card">

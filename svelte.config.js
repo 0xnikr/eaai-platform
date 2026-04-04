@@ -13,7 +13,11 @@ const config = {
 			return isExternalLibrary ? undefined : true;
 		}
 	},
-	kit: { adapter: adapter() }
+	kit: {
+		adapter: adapter({
+			runtime: 'nodejs22.x'
+		})
+	}
 };
 
 export default config;

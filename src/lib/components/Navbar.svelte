@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/state';
+	import { page } from '$app/stores';
 	import ThemeToggle from './ThemeToggle.svelte';
 
 	let scrolled = $state(false);
@@ -25,8 +25,8 @@
 	}
 
 	function isActive(href: string): boolean {
-		if (href === '/') return page.url.pathname === '/';
-		return page.url.pathname.startsWith(href);
+		if (href === '/') return $page.url.pathname === '/';
+		return $page.url.pathname.startsWith(href);
 	}
 </script>
 

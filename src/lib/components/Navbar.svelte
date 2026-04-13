@@ -28,11 +28,22 @@
 		if (href === '/') return page.url.pathname === '/';
 		return page.url.pathname.startsWith(href);
 	}
+
+	$effect(() => {
+		if (!mobileOpen) return;
+
+		const originalOverflow = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+
+		return () => {
+			document.body.style.overflow = originalOverflow;
+		};
+	});
 </script>
 
 <svelte:window onscroll={handleScroll} />
 
-<nav class="navbar" class:scrolled aria-label="Main navigation">
+<nav class="navbar" class:scrolled class:mobile-open={mobileOpen} aria-label="Main navigation">
 	<div class="nav-inner container-main">
 		<!-- Logo -->
 		<a href="/" class="nav-logo" onclick={closeMobile}>
@@ -124,11 +135,17 @@
 		background: transparent;
 	}
 
-	.navbar.scrolled {
+	.navbar.scrolled,
+	.navbar.mobile-open {
 		background: var(--glass-bg);
 		backdrop-filter: blur(20px);
 		-webkit-backdrop-filter: blur(20px);
 		border-bottom: 1px solid var(--glass-border);
+	}
+
+	.navbar.mobile-open {
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
 	}
 
 	.nav-inner {

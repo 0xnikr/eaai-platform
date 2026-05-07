@@ -51,7 +51,7 @@
 			<span class="logo-icon">
 				<svg width="28" height="28" viewBox="0 0 32 32" fill="none">
 					<rect x="2" y="2" width="28" height="28" rx="8" stroke="currentColor" stroke-width="2" />
-					<path d="M10 22V10l6 8 6-8v12" stroke="url(#logo-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+					<path d="M21 10H11v12h10M11 16h8" stroke="url(#logo-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
 					<defs>
 						<linearGradient id="logo-grad" x1="10" y1="10" x2="22" y2="22">
 							<stop stop-color="var(--accent-primary)" />

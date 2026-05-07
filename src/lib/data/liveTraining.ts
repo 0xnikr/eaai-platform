@@ -34,7 +34,7 @@ export const liveTrainings: LiveTraining[] = [
 		description:
 			'A hands-on two-day workshop for C-suite and senior leaders to build a complete AI transformation strategy with implementation-ready deliverables.',
 		level: 'Executive',
-		date: '2025-05-15',
+		date: '2026-03-15',
 		time: '9:00 AM - 5:00 PM',
 		timezone: 'EST',
 		duration: '2 Days',
@@ -82,7 +82,7 @@ export const liveTrainings: LiveTraining[] = [
 		description:
 			'Intensive program for implementation leaders responsible for deploying AI initiatives. Covers team building, vendor management, change management, and scaling.',
 		level: 'Advanced',
-		date: '2025-06-02',
+		date: '2026-01-02',
 		time: '10:00 AM - 4:00 PM',
 		timezone: 'EST',
 		duration: '3 Days',
@@ -131,7 +131,7 @@ export const liveTrainings: LiveTraining[] = [
 		description:
 			'Practical workshop for HR leaders, L&D directors, and department leaders building organization-wide AI capability programs.',
 		level: 'Intermediate',
-		date: '2025-07-10',
+		date: '2026-02-10',
 		time: '9:00 AM - 1:00 PM',
 		timezone: 'EST',
 		duration: '4 Hours',
@@ -155,7 +155,7 @@ export const liveTrainings: LiveTraining[] = [
 		description:
 			'Learn to design and implement the metrics that prove AI value, track adoption, and drive continuous optimization of AI initiatives.',
 		level: 'Intermediate',
-		date: '2025-07-24',
+		date: '2026-05-18',
 		time: '10:00 AM - 2:00 PM',
 		timezone: 'EST',
 		duration: '4 Hours',
@@ -163,7 +163,7 @@ export const liveTrainings: LiveTraining[] = [
 		instructor: instructors[0],
 		price: 795,
 		seatsTotal: 45,
-		seatsAvailable: 28,
+		seatsAvailable: 0,
 		category: 'Measurement',
 		tags: ['KPIs', 'Measurement', 'Analytics'],
 		outcomes: [
@@ -179,7 +179,7 @@ export const liveTrainings: LiveTraining[] = [
 		description:
 			'A customized full-day session for your executive team, focused on AI strategy alignment, role clarity, and transformation leadership.',
 		level: 'Executive',
-		date: '2025-08-05',
+		date: '2026-01-05',
 		time: 'Custom Schedule',
 		timezone: 'Flexible',
 		duration: 'Full Day',

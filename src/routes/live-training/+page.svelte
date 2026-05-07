@@ -6,6 +6,10 @@
 	import { liveTrainings, instructors } from '$lib/data/liveTraining';
 	import { testimonials } from '$lib/data/siteContent';
 	import { reveal } from '$lib/actions/reveal';
+
+const sortedTrainings = [...liveTrainings].sort(
+	(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 </script>
 
 <svelte:head>
@@ -30,7 +34,7 @@
 			<h2>Live Training <span class="gradient-text">Sessions</span></h2>
 		</div>
 		<div class="training-grid">
-			{#each liveTrainings as training, i}
+			{#each sortedTrainings as training, i}
 				<div use:reveal={{ delay: i * 100 }}>
 					<LiveTrainingCard {training} />
 				</div>

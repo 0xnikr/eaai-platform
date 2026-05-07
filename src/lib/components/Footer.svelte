@@ -4,6 +4,7 @@
 	const footerLinks = {
 		programs: [
 			{ label: 'Executive Advisory', href: '/advisory' },
+			{ label: 'AI Development Capabilities', href: '/capabilities' },
 			{ label: 'Leadership Programs', href: '/leadership-programs' },
 			{ label: 'Certification', href: '/certification' },
 			{ label: 'Courses', href: '/courses' },
@@ -42,19 +43,19 @@
 			<div class="footer-columns">
 				<div class="footer-col">
 					<h4>Programs</h4>
-					{#each footerLinks.programs as link}
+					{#each footerLinks.programs as link (link.href)}
 						<a href={link.href}>{link.label}</a>
 					{/each}
 				</div>
 				<div class="footer-col">
 					<h4>Resources</h4>
-					{#each footerLinks.resources as link}
+					{#each footerLinks.resources as link (link.href)}
 						<a href={link.href}>{link.label}</a>
 					{/each}
 				</div>
 				<div class="footer-col">
 					<h4>Platform</h4>
-					{#each footerLinks.platform as link}
+					{#each footerLinks.platform as link (link.href)}
 						<a href={link.href}>{link.label}</a>
 					{/each}
 				</div>
@@ -150,6 +151,8 @@
 		letter-spacing: 0.08em;
 		color: var(--text-muted);
 		margin: 0 0 1rem;
+		padding-bottom: 0.625rem;
+		border-bottom: 1px solid var(--border-default);
 	}
 
 	.footer-col a {

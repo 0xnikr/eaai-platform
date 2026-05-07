@@ -17,6 +17,16 @@
 
 <section class="section-spacing">
 	<div class="container-main">
+		<!-- Future Scheduler Placeholder -->
+		<div class="scheduler-placeholder">
+			<div class="placeholder-inner">
+				<div class="placeholder-icon">📅</div>
+				<h3>Scheduling System</h3>
+				<p>Our integrated booking system is coming soon. In the meantime, select any option above or contact us directly.</p>
+				<a href="/contact" class="btn-secondary">Contact Us Directly</a>
+			</div>
+		</div>
+
 		<div class="booking-grid">
 			{#each bookingTypes as booking}
 				<div class="booking-card premium-card">
@@ -47,22 +57,12 @@
 				</div>
 			{/each}
 		</div>
-
-		<!-- Future Scheduler Placeholder -->
-		<div class="scheduler-placeholder">
-			<div class="placeholder-inner">
-				<div class="placeholder-icon">📅</div>
-				<h3>Scheduling System</h3>
-				<p>Our integrated booking system is coming soon. In the meantime, select any option above or contact us directly.</p>
-				<a href="/contact" class="btn-secondary">Contact Us Directly</a>
-			</div>
-		</div>
 	</div>
 </section>
 
 <style>
 	.booking-grid {
-		display: grid; grid-template-columns: 1fr; gap: 1.25rem;
+		display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 4rem;
 	}
 	@media (min-width: 640px) { .booking-grid { grid-template-columns: repeat(2, 1fr); } }
 	@media (min-width: 1024px) { .booking-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -84,7 +84,7 @@
 	.booking-btn { width: 100%; text-align: center; padding: 0.75rem; font-size: 0.875rem; }
 
 	.scheduler-placeholder {
-		margin-top: 4rem; padding: 3rem; background: var(--bg-surface); border: 2px dashed var(--border-default); border-radius: var(--radius-card); text-align: center;
+		padding: 3rem; background: var(--bg-surface); border: 2px dashed var(--border-default); border-radius: var(--radius-card); text-align: center;
 	}
 	.placeholder-inner { max-width: 400px; margin: 0 auto; }
 	.placeholder-icon { font-size: 3rem; margin-bottom: 1rem; }

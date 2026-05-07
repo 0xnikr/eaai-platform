@@ -3,6 +3,18 @@
 	import type { ActionData } from './$types';
 
 	let { form }: { form?: ActionData } = $props();
+	let showToast = $state(false);
+
+	$effect(() => {
+		if (!form?.message) return;
+
+		showToast = true;
+		const timer = setTimeout(() => {
+			showToast = false;
+		}, 2800);
+
+		return () => clearTimeout(timer);
+	});
 </script>
 
 <svelte:head>
@@ -19,7 +31,7 @@
 
 <section class="section-spacing">
 	<div class="container-main">
-		{#if form?.message}
+		{#if showToast && form?.message}
 			<div class="form-toast" class:success={form.success} role={form.success ? 'status' : 'alert'}>
 				{form.message}
 			</div>
@@ -110,23 +122,42 @@
 	@media (min-width: 768px) { .contact-layout { grid-template-columns: 1.5fr 1fr; } }
 
 	.form-toast {
-		max-width: 720px;
-		margin: 0 auto 2rem;
-		padding: 1rem 1.25rem;
+		position: fixed;
+		top: 1.25rem;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 1200;
+		min-width: min(90vw, 320px);
+		max-width: min(90vw, 560px);
+		padding: 0.875rem 1.125rem;
 		text-align: center;
-		font-size: 0.9375rem;
+		font-size: 0.875rem;
 		font-weight: 600;
 		color: var(--text-secondary);
-		background: var(--bg-card);
-		border: 1px solid var(--border-default);
-		border-radius: var(--radius-card);
-		box-shadow: var(--shadow-card);
+		background: var(--glass-bg);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border: 1px solid var(--glass-border);
+		border-radius: var(--radius-button);
+		box-shadow: var(--shadow-elevated);
+		animation: toastIn 220ms ease;
 	}
 
 	.form-toast.success {
 		color: var(--accent-primary);
 		background: var(--accent-glow);
 		border-color: color-mix(in srgb, var(--accent-primary) 28%, var(--border-default));
+	}
+
+	@keyframes toastIn {
+		from {
+			opacity: 0;
+			transform: translate(-50%, -10px);
+		}
+		to {
+			opacity: 1;
+			transform: translate(-50%, 0);
+		}
 	}
 
 	.contact-form { display: flex; flex-direction: column; gap: 1.25rem; }

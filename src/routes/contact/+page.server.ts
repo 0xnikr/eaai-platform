@@ -2,9 +2,7 @@ import { env } from '$env/dynamic/private';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
-const CONTACT_WEBHOOK_URL =
-	env.CONTACT_WEBHOOK_URL ??
-	'https://script.google.com/macros/s/AKfycbyWsx8vk8AdMKA4w-wROudSmQdvO8xZvzaMpXIYI7Vsil0tgkUocjCmpu7jTOJe_Kct3Q/exec';
+const CONTACT_WEBHOOK_URL = env.CONTACT_WEBHOOK_URL;
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -19,6 +17,10 @@ export const actions: Actions = {
 			return fail(400, { message: 'Please complete the required fields.' });
 		}
 
+		if (!CONTACT_WEBHOOK_URL) {
+			return fail(500, { message: 'Contact form is temporarily unavailable.' });
+		}
+
 		const response = await fetch(CONTACT_WEBHOOK_URL, {
 			method: 'POST',
 			headers: {
@@ -31,6 +33,6 @@ export const actions: Actions = {
 			return fail(502, { message: 'Something went wrong. Please try again.' });
 		}
 
-		return { success: true, message: 'form successfully submitted.' };
+		return { success: true, message: 'Form successfully submitted.' };
 	}
 };

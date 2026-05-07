@@ -1,5 +1,8 @@
 <script lang="ts">
 	import Hero from '$lib/components/Hero.svelte';
+	import type { ActionData } from './$types';
+
+	let { form }: { form?: ActionData } = $props();
 </script>
 
 <svelte:head>
@@ -16,10 +19,16 @@
 
 <section class="section-spacing">
 	<div class="container-main">
+		{#if form?.message}
+			<div class="form-toast" class:success={form.success} role={form.success ? 'status' : 'alert'}>
+				{form.message}
+			</div>
+		{/if}
+
 		<div class="contact-layout">
 			<!-- Form -->
 			<div class="contact-form-wrap">
-				<form class="contact-form" onsubmit={(e) => e.preventDefault()}>
+				<form class="contact-form" method="POST">
 					<div class="form-row">
 						<div class="form-group">
 							<label for="firstName">First Name</label>
@@ -68,7 +77,7 @@
 							<span class="info-icon">📧</span>
 							<div>
 								<span class="info-label">Email</span>
-								<span class="info-value">hello@eaai.institute</span>
+								<span class="info-value">hello@eaai.dev</span>
 							</div>
 						</div>
 						<div class="info-item">
@@ -82,7 +91,7 @@
 							<span class="info-icon">💼</span>
 							<div>
 								<span class="info-label">Enterprise</span>
-								<span class="info-value">enterprise@eaai.institute</span>
+								<span class="info-value">enterprise@eaai.dev</span>
 							</div>
 						</div>
 					</div>
@@ -99,6 +108,26 @@
 <style>
 	.contact-layout { display: grid; grid-template-columns: 1fr; gap: 3rem; }
 	@media (min-width: 768px) { .contact-layout { grid-template-columns: 1.5fr 1fr; } }
+
+	.form-toast {
+		max-width: 720px;
+		margin: 0 auto 2rem;
+		padding: 1rem 1.25rem;
+		text-align: center;
+		font-size: 0.9375rem;
+		font-weight: 600;
+		color: var(--text-secondary);
+		background: var(--bg-card);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow-card);
+	}
+
+	.form-toast.success {
+		color: var(--accent-primary);
+		background: var(--accent-glow);
+		border-color: color-mix(in srgb, var(--accent-primary) 28%, var(--border-default));
+	}
 
 	.contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
 	.form-row { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }

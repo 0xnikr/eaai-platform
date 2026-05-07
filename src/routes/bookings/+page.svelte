@@ -8,14 +8,16 @@
 	<meta name="description" content="Schedule consultations, register for training, and book advisory engagements with the Executive AI Advisory Institute." />
 </svelte:head>
 
-<Hero
-	eyebrow="Bookings"
-	title="Start Your <span class='gradient'>AI Journey</span>"
-	subtitle="From complimentary strategy consultations to enterprise advisory engagements — choose the right starting point for your organization."
-	compact={true}
-/>
+<div class="bookings-hero">
+	<Hero
+		eyebrow="Bookings"
+		title="Start Your <span class='gradient'>AI Journey</span>"
+		subtitle="From complimentary strategy consultations to enterprise advisory engagements — choose the right starting point for your organization."
+		compact={true}
+	/>
+</div>
 
-<section class="section-spacing">
+<section class="section-spacing bookings-intro">
 	<div class="container-main">
 		<!-- Future Scheduler Placeholder -->
 		<div class="scheduler-placeholder">
@@ -61,8 +63,47 @@
 </section>
 
 <style>
+	.bookings-hero :global(.hero-eyebrow) {
+		display: none;
+	}
+
+	.bookings-hero :global(.hero.compact) {
+		padding: 6.5rem 0 2.75rem;
+	}
+
+	.bookings-hero :global(.hero-subtitle) {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.bookings-hero :global(.hero-eyebrow) {
+			display: inline-flex;
+		}
+
+		.bookings-hero :global(.hero.compact) {
+			padding: 10rem 0 5rem;
+		}
+
+		.bookings-hero :global(.hero-subtitle) {
+			display: block;
+			margin-top: 1.5rem;
+		}
+	}
+
+	.bookings-intro {
+		padding-top: 0;
+		margin-top: -1.75rem;
+	}
+
+	@media (min-width: 768px) {
+		.bookings-intro {
+			padding-top: 1.5rem;
+			margin-top: -1rem;
+		}
+	}
+
 	.booking-grid {
-		display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 4rem;
+		display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 2rem;
 	}
 	@media (min-width: 640px) { .booking-grid { grid-template-columns: repeat(2, 1fr); } }
 	@media (min-width: 1024px) { .booking-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -84,10 +125,20 @@
 	.booking-btn { width: 100%; text-align: center; padding: 0.75rem; font-size: 0.875rem; }
 
 	.scheduler-placeholder {
-		padding: 3rem; background: var(--bg-surface); border: 2px dashed var(--border-default); border-radius: var(--radius-card); text-align: center;
+		padding: 1.75rem; background: var(--bg-surface); border: 2px dashed var(--border-default); border-radius: var(--radius-card); text-align: center;
 	}
 	.placeholder-inner { max-width: 400px; margin: 0 auto; }
-	.placeholder-icon { font-size: 3rem; margin-bottom: 1rem; }
-	.scheduler-placeholder h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem; }
-	.scheduler-placeholder p { font-size: 0.9375rem; color: var(--text-secondary); margin: 0 0 1.5rem; line-height: 1.5; }
+	.placeholder-icon { font-size: 2.25rem; margin-bottom: 0.5rem; }
+	.scheduler-placeholder h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.375rem; }
+	.scheduler-placeholder p { font-size: 0.9375rem; color: var(--text-secondary); margin: 0 0 1rem; line-height: 1.45; }
+
+	@media (min-width: 768px) {
+		.booking-grid {
+			margin-top: 4rem;
+		}
+
+		.scheduler-placeholder {
+			padding: 3rem;
+		}
+	}
 </style>

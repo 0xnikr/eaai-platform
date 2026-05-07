@@ -123,10 +123,11 @@
 
 	.form-toast {
 		position: fixed;
-		top: 1.25rem;
+		top: calc(72px + 0.75rem);
 		left: 50%;
 		transform: translateX(-50%);
-		z-index: 1200;
+		z-index: 950;
+		pointer-events: none;
 		min-width: min(90vw, 320px);
 		max-width: min(90vw, 560px);
 		padding: 0.875rem 1.125rem;

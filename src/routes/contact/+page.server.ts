@@ -1,4 +1,5 @@
 import { env } from '$env/dynamic/private';
+import { dev } from '$app/environment';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
@@ -18,6 +19,9 @@ export const actions: Actions = {
 		}
 
 		if (!CONTACT_WEBHOOK_URL) {
+			if (dev) {
+				return { success: true, message: 'Form successfully submitted.' };
+			}
 			return fail(500, { message: 'Contact form is temporarily unavailable.' });
 		}
 

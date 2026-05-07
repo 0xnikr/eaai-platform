@@ -75,15 +75,17 @@
 		const rect = sectionEl.getBoundingClientRect();
 		const sectionHeight = sectionEl.offsetHeight;
 		const viewportHeight = window.innerHeight;
+		const navHeight = 72;
+		const pinnedViewportHeight = Math.max(viewportHeight - navHeight, 1);
 
 		// Section is in view
-		if (rect.top <= 0 && rect.bottom >= viewportHeight) {
+		if (rect.top <= navHeight && rect.bottom >= viewportHeight) {
 			pinned = true;
 			completed = false;
 
 			// Calculate progress through the pinned section
-			const scrolledInto = -rect.top;
-			const scrollableDistance = sectionHeight - viewportHeight;
+			const scrolledInto = Math.max(navHeight - rect.top, 0);
+			const scrollableDistance = Math.max(sectionHeight - pinnedViewportHeight, 1);
 			const progress = Math.min(Math.max(scrolledInto / scrollableDistance, 0), 1);
 
 			currentStage = Math.min(Math.floor(progress * stages.length), stages.length - 1);
@@ -190,8 +192,9 @@
 
 	.sticky-container {
 		position: sticky;
-		top: 0;
-		height: 100vh;
+		top: 72px;
+		height: calc(100svh - 72px);
+		min-height: calc(100vh - 72px);
 		display: flex;
 		align-items: center;
 		overflow: hidden;

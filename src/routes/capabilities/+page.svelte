@@ -250,16 +250,29 @@
 	];
 
 	const industryTags = [
-		'Legal funding',
+		'Professional services',
+		'E-commerce',
+		'Music distribution',
 		'Solar',
-		'Home services',
 		'Finance',
 		'Real estate',
-		'Healthcare admin',
-		'E-commerce',
+		'Healthcare',
+		'Legal funding',
 		'Agencies',
-		'Professional services'
+		'SaaS',
+		'Construction',
+		'Logistics',
+		'Recruiting & staffing'
+		
 	];
+
+	function moveSpotlight(event: PointerEvent) {
+		const card = event.currentTarget as HTMLElement;
+		const rect = card.getBoundingClientRect();
+
+		card.style.setProperty('--spotlight-x', `${event.clientX - rect.left}px`);
+		card.style.setProperty('--spotlight-y', `${event.clientY - rect.top}px`);
+	}
 </script>
 
 <svelte:head>
@@ -374,8 +387,7 @@
 			<span class="eyebrow">Examples</span>
 			<h2>Systems We Can <span class="gradient-text">Build With You</span></h2>
 			<p class="section-subtitle">
-				These are systems we have already built around real workflows, business tools, data, and
-				compliance requirements.
+				Systems we've already shipped around real workflows, business tools, and compliance.
 			</p>
 		</div>
 		<div class="systems-grid">
@@ -412,11 +424,11 @@
 <!-- Differentiator -->
 <section class="section-spacing differentiator-section">
 	<div class="container-main">
-		<div class="differentiator-card" use:reveal>
+		<div class="differentiator-card" role="group" onpointermove={moveSpotlight} use:reveal>
 			<span class="eyebrow">Why EAAI</span>
 			<blockquote>
-				We are not just prompt engineers. We are full-stack AI builders who understand software,
-				data, automation, workflows, and business outcomes.
+				We're not just prompt engineers. We're full-stack AI builders who understand software,
+				data, automation, and business outcomes.
 			</blockquote>
 			<div class="differentiator-grid">
 				{#each differentiators as item, i (item)}
@@ -529,8 +541,95 @@
 	}
 
 	.positioning-card {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		--spotlight-x: 18%;
+		--spotlight-y: 18%;
 		padding: 2rem;
-		background: linear-gradient(135deg, var(--accent-glow), transparent 55%), var(--bg-card);
+		cursor: default;
+		background: var(--bg-card);
+		background-position:
+			0% 50%,
+			0 0;
+		background-size:
+			140% 100%,
+			auto;
+	}
+
+	/* Temporarily disabled Builder Mentality cursor spotlight.
+	.positioning-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		opacity: 0;
+		background: radial-gradient(
+			560px circle at var(--spotlight-x) var(--spotlight-y),
+			color-mix(in srgb, var(--accent-primary) 30%, transparent),
+			color-mix(in srgb, var(--accent-secondary) 16%, transparent) 30%,
+			color-mix(in srgb, var(--accent-primary) 7%, transparent) 52%,
+			transparent 78%
+		);
+		transition: opacity 0.25s ease;
+	}
+
+	.positioning-card:hover::before {
+		opacity: 1;
+	}
+	*/
+
+	.positioning-card:hover {
+		border-color: var(--border-default);
+		box-shadow: var(--shadow-card);
+		transform: none;
+	}
+
+	.positioning-card::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		background: linear-gradient(110deg, var(--accent-glow), transparent 45%, rgba(139, 92, 246, 0.08));
+		background-size: 160% 100%;
+	}
+
+	.positioning-card:hover::after {
+		animation-play-state: paused;
+	}
+
+	.positioning-card > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Temporarily disabled Builder Mentality cursor spotlight.
+	:global(:root.light) .positioning-card::before {
+		background: radial-gradient(
+			560px circle at var(--spotlight-x) var(--spotlight-y),
+			color-mix(in srgb, var(--accent-primary) 18%, transparent),
+			color-mix(in srgb, var(--accent-secondary) 10%, transparent) 30%,
+			color-mix(in srgb, var(--accent-primary) 5%, transparent) 52%,
+			transparent 78%
+		);
+	}
+	*/
+
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+		.positioning-card::after {
+			animation: builderGradientDrift 4.5s ease-in-out infinite alternate;
+		}
+	}
+
+	@keyframes builderGradientDrift {
+		from {
+			background-position: 0% 50%;
+		}
+		to {
+			background-position: 100% 50%;
+		}
 	}
 
 	.card-label {
@@ -743,6 +842,11 @@
 	}
 
 	.differentiator-card {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		--spotlight-x: 18%;
+		--spotlight-y: 18%;
 		max-width: 980px;
 		margin: 0 auto;
 		padding: clamp(2rem, 5vw, 3.5rem);
@@ -753,6 +857,42 @@
 		border: 1px solid var(--border-default);
 		border-radius: calc(var(--radius-card) * 1.25);
 		box-shadow: var(--shadow-elevated);
+	}
+
+	.differentiator-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		opacity: 0;
+		background: radial-gradient(
+			560px circle at var(--spotlight-x) var(--spotlight-y),
+			color-mix(in srgb, var(--accent-primary) 30%, transparent),
+			color-mix(in srgb, var(--accent-secondary) 16%, transparent) 30%,
+			color-mix(in srgb, var(--accent-primary) 7%, transparent) 52%,
+			transparent 78%
+		);
+		transition: opacity 0.25s ease;
+	}
+
+	.differentiator-card > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	.differentiator-card:hover::before {
+		opacity: 1;
+	}
+
+	:global(:root.light) .differentiator-card::before {
+		background: radial-gradient(
+			560px circle at var(--spotlight-x) var(--spotlight-y),
+			color-mix(in srgb, var(--accent-primary) 18%, transparent),
+			color-mix(in srgb, var(--accent-secondary) 10%, transparent) 30%,
+			color-mix(in srgb, var(--accent-primary) 5%, transparent) 52%,
+			transparent 78%
+		);
 	}
 
 	blockquote {

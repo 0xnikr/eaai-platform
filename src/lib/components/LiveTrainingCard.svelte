@@ -6,12 +6,14 @@
 	}
 
 	let { training }: Props = $props();
+const isSoldOut = $derived(training.seatsAvailable <= 0);
 
 	$effect(() => {
 		// Keep reactivity
 	});
 
 	function seatsUrgency(available: number, total: number): string {
+	if (available <= 0) return 'soldout';
 		const pct = available / total;
 		if (pct <= 0.15) return 'critical';
 		if (pct <= 0.4) return 'low';
@@ -58,7 +60,13 @@
 				{training.seatsAvailable} seats left
 			</span>
 		</div>
-		<span class="card-cta btn-primary">Reserve Spot</span>
+		<span class="card-cta" class:btn-primary={!isSoldOut} class:soldout={isSoldOut}>
+			{#if isSoldOut}
+				Sold Out
+			{:else}
+				Reserve Spot
+			{/if}
+		</span>
 	</div>
 </a>
 
@@ -184,9 +192,19 @@
 		color: #ef4444;
 	}
 
+	.seats.soldout {
+		color: var(--text-muted);
+	}
+
 	.card-cta {
 		padding: 0.625rem 1.25rem;
 		font-size: 0.8125rem;
 		flex-shrink: 0;
+	}
+
+	.card-cta.soldout {
+		color: var(--text-secondary);
+		background: var(--bg-elevated);
+		border: 1px solid var(--border-default);
 	}
 </style>

@@ -8,6 +8,7 @@
 	const navItems = [
 		{ label: 'Home', href: '/' },
 		{ label: 'Advisory', href: '/advisory' },
+		{ label: 'Capabilities', href: '/capabilities' },
 		{ label: 'Leadership', href: '/leadership-programs' },
 		{ label: 'Certification', href: '/certification' },
 		{ label: 'Courses', href: '/courses' },
@@ -67,7 +68,7 @@
 
 		<!-- Desktop Nav -->
 		<div class="nav-links">
-			{#each navItems as item}
+			{#each navItems as item (item.href)}
 				<a
 					href={item.href}
 					class="nav-link"
@@ -104,7 +105,7 @@
 		<div class="mobile-overlay" onclick={closeMobile} role="presentation"></div>
 		<div class="mobile-menu" class:open={mobileOpen}>
 			<div class="mobile-menu-inner">
-				{#each navItems as item}
+				{#each navItems as item (item.href)}
 					<a
 						href={item.href}
 						class="mobile-link"

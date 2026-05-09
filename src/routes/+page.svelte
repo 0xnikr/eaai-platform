@@ -26,6 +26,18 @@
 		{ title: 'Enterprise Rollout', desc: 'End-to-end AI deployment and scaling support', href: '/advisory', icon: '🚀' },
 		{ title: 'Adoption Measurement', desc: 'KPI dashboards and impact tracking systems', href: '/advisory', icon: '📈' }
 	];
+	const mobileOfferTitles = new Set([
+		'Executive Advisory',
+		'Leadership Programs',
+		'Enterprise Rollout',
+		'Adoption Measurement'
+	]);
+	let innerWidth = $state<number | undefined>(undefined);
+	const visibleOfferCards = $derived(
+		innerWidth !== undefined && innerWidth < 1024
+			? offerCards.filter((card) => mobileOfferTitles.has(card.title))
+			: offerCards
+	);
 
 	const processSteps = [
 		{ step: '01', title: 'Assess', desc: 'Evaluate organizational AI readiness across strategy, talent, data, technology, and culture.' },
@@ -42,6 +54,8 @@
 		{ value: '$2.4M', label: 'Cost Savings', desc: 'average annual savings from AI optimization' }
 	];
 </script>
+
+<svelte:window bind:innerWidth />
 
 <svelte:head>
 	<title>Executive AI Advisory Institute — Building Organizational AI Capability</title>
@@ -88,8 +102,10 @@
 	</div>
 </section>
 
-<!-- PINNED SCROLL TRANSFORMATION -->
-<PinnedScroll />
+<!-- PINNED SCROLL TRANSFORMATION (temporarily disabled) -->
+{#if false}
+	<PinnedScroll />
+{/if}
 
 <!-- OFFER PILLARS GRID -->
 <section class="section-spacing" id="offers">
@@ -100,7 +116,7 @@
 			<p class="section-subtitle">From strategic advisory to hands-on implementation — every capability your organization needs to succeed with AI.</p>
 		</div>
 		<div class="offers-grid">
-			{#each offerCards as card, i}
+			{#each visibleOfferCards as card, i}
 				<a href={card.href} class="offer-card premium-card" use:reveal={{ delay: i * 80 }}>
 					<span class="offer-icon">{card.icon}</span>
 					<h3>{card.title}</h3>

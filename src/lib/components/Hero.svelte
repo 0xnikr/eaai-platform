@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import ShootingStars from './ShootingStars.svelte';
 
 	interface Props {
 		eyebrow?: string;
@@ -29,19 +30,7 @@
 <section class="hero" class:compact class:centered>
 	{#if showStars}
 		<div class="hero-bg">
-			<div class="stars-layer">
-				{#each [
-					{ delay: 0, top: 6, left: 5, dur: 3, len: 100 },
-					{ delay: 2.8, top: 22, left: 30, dur: 2.5, len: 140 },
-					{ delay: 5.5, top: 12, left: 55, dur: 3.2, len: 90 },
-					{ delay: 1.5, top: 35, left: 10, dur: 2.8, len: 120 },
-					{ delay: 4.2, top: 8, left: 70, dur: 3.5, len: 80 },
-					{ delay: 7, top: 28, left: 45, dur: 2.2, len: 110 },
-					{ delay: 8.5, top: 15, left: 20, dur: 3, len: 130 }
-				] as star}
-					<div class="shooting-star" style="--delay: {star.delay}s; --top: {star.top}%; --left: {star.left}%; --duration: {star.dur}s; --len: {star.len}px;"></div>
-				{/each}
-			</div>
+			<ShootingStars />
 			<div class="gradient-orb orb-1"></div>
 			<div class="gradient-orb orb-2"></div>
 			<div class="gradient-orb orb-3"></div>
@@ -183,41 +172,6 @@
 		inset: 0;
 		overflow: hidden;
 		z-index: 0;
-	}
-
-	.stars-layer {
-		position: absolute;
-		inset: 0;
-	}
-
-	.shooting-star {
-		position: absolute;
-		top: var(--top);
-		left: var(--left);
-		width: var(--len, 100px);
-		height: 2px;
-		/* Trail: transparent at tail (left) → bright at head (right) */
-		background: linear-gradient(90deg, transparent 0%, transparent 10%, rgba(0, 229, 187, 0.03) 30%, rgba(0, 229, 187, 0.15) 60%, rgba(0, 229, 187, 0.5) 85%, rgba(0, 229, 187, 0.9) 100%);
-		border-radius: 0 50% 50% 0;
-		opacity: 0;
-		animation: shootingStar var(--duration) ease-out var(--delay) infinite;
-	}
-
-	/* Bright glowing head of the shooting star */
-	.shooting-star::before {
-		content: '';
-		position: absolute;
-		right: -1px;
-		top: 50%;
-		transform: translateY(-50%);
-		width: 4px;
-		height: 4px;
-		border-radius: 50%;
-		background: #fff;
-		box-shadow:
-			0 0 4px 1px rgba(255, 255, 255, 0.9),
-			0 0 8px 2px rgba(0, 229, 187, 0.7),
-			0 0 16px 4px rgba(0, 229, 187, 0.3);
 	}
 
 	.gradient-orb {

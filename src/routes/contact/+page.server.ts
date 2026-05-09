@@ -19,11 +19,11 @@ export const actions: Actions = {
 		}
 
 		if (!CONTACT_WEBHOOK_URL) {
-			if (dev) {
-				return { success: true, message: 'Form successfully submitted.' };
-			}
-			return fail(500, { message: 'Contact form is temporarily unavailable.' });
-		}
+	if (dev) {
+		return { success: true, message: 'Form successfully submitted.' };
+	}
+	return fail(500, { message: 'Contact form is temporarily unavailable.' });
+}
 
 		const response = await fetch(CONTACT_WEBHOOK_URL, {
 			method: 'POST',

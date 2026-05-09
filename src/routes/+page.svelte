@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Hero from '$lib/components/Hero.svelte';
+	import PinnedScroll from '$lib/components/PinnedScroll.svelte';
 	import ComparisonTable from '$lib/components/ComparisonTable.svelte';
 	import TestimonialGrid from '$lib/components/TestimonialGrid.svelte';
 	import FAQAccordion from '$lib/components/FAQAccordion.svelte';

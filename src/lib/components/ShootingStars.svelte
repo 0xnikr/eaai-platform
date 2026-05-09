@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	type Star = {
 		delay: number;
 		top: number;
@@ -7,6 +9,16 @@
 		len: number;
 		dx: number;
 		dy: number;
+	};
+
+	type Meteor = {
+		x: number;
+		y: number;
+		vx: number;
+		vy: number;
+		len: number;
+		age: number;
+		life: number;
 	};
 
 	const desktopStars: Star[] = [
@@ -19,11 +31,151 @@
 		{ delay: 8.5, top: 15, left: 20, dur: 3, len: 130, dx: 500, dy: 300 }
 	];
 
-	const mobileStars: Star[] = [
-		{ delay: 1.2, top: 8, left: -8, dur: 13, len: 70, dx: 260, dy: 150 },
-		{ delay: 7.5, top: 24, left: 34, dur: 16, len: 88, dx: 280, dy: 160 },
-		{ delay: 14, top: 14, left: 62, dur: 18, len: 62, dx: 230, dy: 135 }
-	];
+	let canvas: HTMLCanvasElement;
+
+	onMount(() => {
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+		const context = ctx;
+
+		const mobileQuery = window.matchMedia('(max-width: 767px)');
+		const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const meteors: Meteor[] = [];
+		let frame = 0;
+		let last = performance.now();
+		let nextSpawn = 0;
+		let running = false;
+
+		function resize() {
+			const dpr = Math.min(window.devicePixelRatio || 1, 2);
+			const { width, height } = canvas.getBoundingClientRect();
+
+			canvas.width = Math.max(1, Math.floor(width * dpr));
+			canvas.height = Math.max(1, Math.floor(height * dpr));
+			context.setTransform(dpr, 0, 0, dpr, 0, 0);
+		}
+
+		function spawn(width: number, height: number) {
+			const angle = (32 + Math.random() * 8) * (Math.PI / 180);
+			const speed = 420 + Math.random() * 220;
+			const x = width * (-0.42 + Math.random() * 1.38);
+			const y = height * (-0.32 + Math.random() * 0.72);
+
+			meteors.push({
+				x,
+				y,
+				vx: Math.cos(angle) * speed,
+				vy: Math.sin(angle) * speed,
+				len: 74 + Math.random() * 48,
+				age: 0,
+				life: 1.15 + Math.random() * 0.45
+			});
+		}
+
+		function drawMeteor(meteor: Meteor) {
+			const progress = Math.min(meteor.age / meteor.life, 1);
+			const fadeIn = Math.min(progress / 0.12, 1);
+			const fadeOut = 1 - Math.max((progress - 0.58) / 0.42, 0);
+			const alpha = Math.max(0, Math.min(fadeIn, fadeOut));
+			const speed = Math.hypot(meteor.vx, meteor.vy);
+			const ux = meteor.vx / speed;
+			const uy = meteor.vy / speed;
+			const length = meteor.len * Math.min(progress / 0.18, 1);
+			const tailX = meteor.x - ux * length;
+			const tailY = meteor.y - uy * length;
+			const gradient = context.createLinearGradient(tailX, tailY, meteor.x, meteor.y);
+
+			gradient.addColorStop(0, 'rgba(0, 229, 187, 0)');
+			gradient.addColorStop(0.42, `rgba(0, 229, 187, ${0.16 * alpha})`);
+			gradient.addColorStop(0.82, `rgba(0, 229, 187, ${0.58 * alpha})`);
+			gradient.addColorStop(1, `rgba(255, 255, 255, ${0.95 * alpha})`);
+
+			context.lineWidth = 2;
+			context.lineCap = 'round';
+			context.strokeStyle = gradient;
+			context.beginPath();
+			context.moveTo(tailX, tailY);
+			context.lineTo(meteor.x, meteor.y);
+			context.stroke();
+
+			context.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+			context.shadowBlur = 12;
+			context.shadowColor = `rgba(0, 229, 187, ${0.5 * alpha})`;
+			context.beginPath();
+			context.arc(meteor.x, meteor.y, 1.8, 0, Math.PI * 2);
+			context.fill();
+			context.shadowBlur = 0;
+		}
+
+		function tick(now: number) {
+			if (!running) return;
+
+			const width = canvas.clientWidth;
+			const height = canvas.clientHeight;
+			const delta = Math.min((now - last) / 1000, 0.05);
+			last = now;
+			nextSpawn -= delta;
+
+			context.clearRect(0, 0, width, height);
+
+			if (nextSpawn <= 0 && meteors.length < 3) {
+				spawn(width, height);
+				nextSpawn = 1.15 + Math.random() * 1.55;
+			}
+
+			for (let i = meteors.length - 1; i >= 0; i -= 1) {
+				const meteor = meteors[i];
+
+				meteor.age += delta;
+				meteor.x += meteor.vx * delta;
+				meteor.y += meteor.vy * delta;
+
+				if (meteor.age >= meteor.life) {
+					meteors.splice(i, 1);
+					continue;
+				}
+
+				drawMeteor(meteor);
+			}
+
+			frame = requestAnimationFrame(tick);
+		}
+
+		function sync() {
+			const shouldRun = mobileQuery.matches && !motionQuery.matches && !document.hidden;
+
+			if (shouldRun === running) return;
+
+			running = shouldRun;
+			if (running) {
+				resize();
+				last = performance.now();
+				nextSpawn = 0.35;
+				frame = requestAnimationFrame(tick);
+			} else {
+				cancelAnimationFrame(frame);
+				meteors.length = 0;
+				context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+			}
+		}
+
+		resize();
+		sync();
+
+		window.addEventListener('resize', resize);
+		document.addEventListener('visibilitychange', sync);
+		mobileQuery.addEventListener('change', sync);
+		motionQuery.addEventListener('change', sync);
+
+		return () => {
+			running = false;
+			cancelAnimationFrame(frame);
+			window.removeEventListener('resize', resize);
+			document.removeEventListener('visibilitychange', sync);
+			mobileQuery.removeEventListener('change', sync);
+			motionQuery.removeEventListener('change', sync);
+		};
+	});
 </script>
 
 <div class="stars-layer desktop-stars" aria-hidden="true">
@@ -35,19 +187,19 @@
 	{/each}
 </div>
 
-<div class="stars-layer mobile-stars" aria-hidden="true">
-	{#each mobileStars as star}
-		<div
-			class="shooting-star mobile-star"
-			style="--delay: {star.delay}s; --top: {star.top}%; --left: {star.left}%; --duration: {star.dur}s; --len: {star.len}px; --dx: {star.dx}px; --dy: {star.dy}px;"
-		></div>
-	{/each}
-</div>
+<canvas bind:this={canvas} class="stars-layer mobile-stars" aria-hidden="true"></canvas>
 
 <style>
 	.stars-layer {
 		position: absolute;
 		inset: 0;
+		pointer-events: none;
+		contain: layout paint;
+	}
+
+	canvas.stars-layer {
+		width: 100%;
+		height: 100%;
 	}
 
 	.desktop-stars {
@@ -75,6 +227,7 @@
 		width: var(--len, 100px);
 		height: 2px;
 		opacity: 0;
+		will-change: transform, opacity, width;
 	}
 
 	.desktop-star {
@@ -89,20 +242,6 @@
 		);
 		border-radius: 0 50% 50% 0;
 		animation: shootingStar var(--duration) ease-out var(--delay) infinite;
-	}
-
-	.mobile-star {
-		background: linear-gradient(
-			90deg,
-			transparent 0%,
-			rgba(0, 229, 187, 0.02) 18%,
-			rgba(0, 229, 187, 0.14) 48%,
-			rgba(0, 229, 187, 0.52) 78%,
-			rgba(255, 255, 255, 0.95) 100%
-		);
-		border-radius: 999px;
-		transform-origin: right center;
-		animation: shootingStarPremium var(--duration) cubic-bezier(0.16, 1, 0.3, 1) var(--delay) infinite;
 	}
 
 	.shooting-star::before {
@@ -124,29 +263,10 @@
 			0 0 16px 4px rgba(0, 229, 187, 0.3);
 	}
 
-	.mobile-star::before {
-		box-shadow:
-			0 0 4px 1px rgba(255, 255, 255, 0.9),
-			0 0 10px 3px rgba(0, 229, 187, 0.55),
-			0 0 22px 6px rgba(0, 229, 187, 0.18);
-	}
-
-	@keyframes shootingStarPremium {
-		0%,
-		72% {
-			opacity: 0;
-			transform: rotate(35deg) translate3d(0, 0, 0) scaleX(0.35);
-		}
-		76% {
-			opacity: 1;
-			transform: rotate(35deg) translate3d(0, 0, 0) scaleX(1);
-		}
-		88% {
-			opacity: 0.86;
-		}
-		100% {
-			opacity: 0;
-			transform: rotate(35deg) translate3d(var(--dx), var(--dy), 0) scaleX(0.82);
+	@media (prefers-reduced-motion: reduce) {
+		.shooting-star {
+			animation: none !important;
+			opacity: 0 !important;
 		}
 	}
 </style>

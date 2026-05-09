@@ -17,6 +17,10 @@
 		{ label: 'Bookings', href: '/bookings' }
 	];
 
+	const mobileNavItems = navItems.filter(
+		(item) => item.href !== '/open-source' && item.href !== '/bookings'
+	);
+
 	function handleScroll() {
 		scrolled = window.scrollY > 20;
 	}
@@ -105,7 +109,7 @@
 		<div class="mobile-overlay" onclick={closeMobile} role="presentation"></div>
 		<div class="mobile-menu" class:open={mobileOpen}>
 			<div class="mobile-menu-inner">
-				{#each navItems as item (item.href)}
+				{#each mobileNavItems as item (item.href)}
 					<a
 						href={item.href}
 						class="mobile-link"
@@ -126,14 +130,113 @@
 </nav>
 
 <style>
+	/*
+		Previous working navbar material, preserved for quick revert:
+
+		.navbar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 1000;
+			background: transparent;
+			border-bottom: 1px solid transparent;
+			transition:
+				background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+				border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+				backdrop-filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.navbar.scrolled,
+		.navbar.mobile-open {
+			background: var(--glass-bg);
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+			border-bottom-color: var(--glass-border);
+		}
+
+		.navbar.mobile-open {
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+		}
+	*/
+
+	/*
+		Saved experimental floating liquid-glass navbar, disabled 2026-05-07.
+		Kept for later reference because the shape/material direction had useful pieces,
+		but the visual result was not right enough to ship.
+
+		.navbar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 1000;
+			padding-top: 0.75rem;
+			background: transparent;
+			pointer-events: none;
+			isolation: isolate;
+		}
+
+		.navbar.scrolled .nav-inner,
+		.navbar.mobile-open .nav-inner {
+			box-shadow:
+				inset 0 1px 0 rgba(255, 255, 255, 0.18),
+				inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+				0 18px 56px rgba(0, 0, 0, 0.28),
+				0 2px 10px rgba(0, 0, 0, 0.14);
+		}
+
+		.navbar.scrolled .nav-inner::before,
+		.navbar.scrolled .nav-inner::after,
+		.navbar.mobile-open .nav-inner::before,
+		.navbar.mobile-open .nav-inner::after {
+			opacity: 1;
+		}
+
+		.nav-inner {
+			position: relative;
+			z-index: 1;
+			--glass-radius: 999px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: calc(100% - 1rem);
+			height: 64px;
+			padding: 0 1rem;
+			gap: 1rem;
+			border: 1px solid transparent;
+			border-radius: var(--glass-radius);
+			overflow: hidden;
+			pointer-events: auto;
+		}
+
+		.nav-inner::before {
+			background: color-mix(in srgb, var(--bg-base) 18%, transparent);
+			backdrop-filter: blur(46px) saturate(3) contrast(1.34) brightness(1.12);
+			-webkit-backdrop-filter: blur(46px) saturate(3) contrast(1.34) brightness(1.12);
+		}
+
+		.nav-inner::after {
+			padding: 1px;
+			background: conic-gradient(from 145deg, rgba(255, 255, 255, 0.76), rgba(45, 212, 168, 0.18), rgba(34, 211, 238, 0.2), rgba(255, 255, 255, 0.76));
+			backdrop-filter: blur(16px) saturate(3.4) contrast(1.65) brightness(1.16);
+			-webkit-backdrop-filter: blur(16px) saturate(3.4) contrast(1.65) brightness(1.16);
+		}
+	*/
+
 	.navbar {
 		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;
 		z-index: 1000;
-		transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 		background: transparent;
+		border-bottom: 1px solid transparent;
+		transition:
+			background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			backdrop-filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.navbar.scrolled,
@@ -141,7 +244,7 @@
 		background: var(--glass-bg);
 		backdrop-filter: blur(20px);
 		-webkit-backdrop-filter: blur(20px);
-		border-bottom: 1px solid var(--glass-border);
+		border-bottom-color: var(--glass-border);
 	}
 
 	.navbar.mobile-open {
